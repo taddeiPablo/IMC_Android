@@ -2,6 +2,8 @@ package com.taddeipablo.imc_app.calculadora
 
 import android.icu.text.DecimalFormat
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +11,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.RangeSlider
 import com.taddeipablo.imc_app.R
+import kotlin.math.pow
 
 class CalcActivity : AppCompatActivity() {
 
@@ -18,13 +22,22 @@ class CalcActivity : AppCompatActivity() {
     private lateinit var viewFemale: CardView
     private lateinit var tvHeight: TextView
     private lateinit var rsHeight: RangeSlider
+    private lateinit var btnLess_weight: FloatingActionButton
+    private lateinit var btnPlus_weight: FloatingActionButton
+    private lateinit var btnLess_age: FloatingActionButton
+    private lateinit var btnPlus_age: FloatingActionButton
+    private lateinit var tvWeight: TextView
+    private lateinit var tvAge: TextView
+    private lateinit var btnCalcular: Button
 
     private var isSelectedOption: Boolean = true
-
     private val male: Int = 1
     private val female: Int = 2
-
     private var lastSSelected: Int = 1
+    private var currentWeight: Int = 60
+    private var currentAge: Int = 30
+    private var currentHeight: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +61,15 @@ class CalcActivity : AppCompatActivity() {
         tvHeight = findViewById(R.id.tvAltura)
         viewMale.setCardBackgroundColor(setGenderColor(isSelectedOption)) //TRUE (ESTA SELECCIONADO)
         viewFemale.setCardBackgroundColor(setGenderColor(!isSelectedOption)) //FALSE (NO ESTA SELECCIONADO)
+        btnLess_weight = findViewById(R.id.restarpeso)
+        btnPlus_weight = findViewById(R.id.sumapeso)
+        btnLess_age = findViewById(R.id.restarEdad)
+        btnPlus_age = findViewById(R.id.sumaEdad)
+        tvWeight = findViewById(R.id.tvpeso)
+        tvWeight.text = "$currentWeight Kg"
+        tvAge = findViewById(R.id.tvedad)
+        tvAge.text = "$currentAge"
+        btnCalcular = findViewById(R.id.calcular)
     }
 
     private fun initListeners(){
@@ -59,8 +81,24 @@ class CalcActivity : AppCompatActivity() {
         }
         rsHeight.addOnChangeListener { _, value, _ ->
             val df = DecimalFormat("#.##")
-            val result = df.format(value)
-            tvHeight.text = "$result CM"
+            //val result = df.format(value)
+            currentHeight = df.format(value).toInt()
+            tvHeight.text = "$currentHeight CM"
+        }
+        btnLess_weight.setOnClickListener{
+            changeWeight(false)
+        }
+        btnPlus_weight.setOnClickListener{
+            changeWeight(true)
+        }
+        btnLess_age.setOnClickListener{
+            changeAge(false)
+        }
+        btnPlus_age.setOnClickListener{
+            changeAge(true)
+        }
+        btnCalcular.setOnClickListener{
+            calculateIMC()
         }
     }
 
@@ -72,7 +110,6 @@ class CalcActivity : AppCompatActivity() {
             lastSSelected = gender
         }
     }
-
     private fun setGenderColor(isSelected: Boolean): Int{
         var colorSelected = if(isSelected){
             R.color.background_component_selected
@@ -81,5 +118,26 @@ class CalcActivity : AppCompatActivity() {
         }
         return ContextCompat.getColor(this, colorSelected)
     }
-
+    private fun changeWeight(operation: Boolean){
+        if(operation){
+            currentWeight += 1
+        }else{
+            currentWeight -= 1
+        }
+        tvWeight.text = "$currentWeight Kg"
+    }
+    private fun changeAge(operation: Boolean){
+        if(operation){
+            currentAge += 1
+        }else{
+            currentAge -= 1
+        }
+        tvAge.text = "$currentAge"
+    }
+    private fun calculateIMC(){
+        val df = DecimalFormat("#.##")
+        var imc = currentWeight / (currentHeight.toDouble().pow(2))
+        var result = df.format(imc).toDouble()
+        Log.i("calculoIMC", "$result")
+    }
 }
