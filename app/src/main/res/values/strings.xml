@@ -2,4 +2,20 @@
     <string name="app_name">Imc_App</string>
     <string name="male">Hombre</string>
     <string name="female">Mujer</string>
+    <string name="altura">ALTURA</string>
+    <string name="peso">Peso</string>
+    <string name="edad">Edad</string>
+    <string name="calc">Calcular</string>
+    <string name="resultado">Tu Resultado</string>
+    <string name="typestr">Tipo</string>
+    <string name="recalc">Re-Calcular</string>
+
+    <string name="bajoPeso">Bajo Peso</string>
+    <string name="pesoNormal">Peso Normal</string>
+    <string name="sobrePeso">Sobre Peso</string>
+    <string name="obesidad">Obesidad</string>
+    <string name="descripcionBajoPeso">Usted tiene bajo peso en este momento !!!</string>
+    <string name="descripcionPesoNormal">Usted tiene un peso optimo !!!</string>
+    <string name="descripcionSobrePeso">Atencion: Usted tiene sobre peso en este momento !!!</string>
+    <string name="descripcionObesidad">Atencion: Usted tiene obesidad !!!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.taddeipablo.imc_app.calculadora
 
+import android.content.Intent
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.RangeSlider
 import com.taddeipablo.imc_app.R
 import kotlin.math.pow
+import kotlin.time.toDuration
 
 class CalcActivity : AppCompatActivity() {
 
@@ -38,6 +40,9 @@ class CalcActivity : AppCompatActivity() {
     private var currentAge: Int = 30
     private var currentHeight: Int = 0
 
+    companion object{
+        const val IMC_KEY = "imcKey"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,8 +141,13 @@ class CalcActivity : AppCompatActivity() {
     }
     private fun calculateIMC(){
         val df = DecimalFormat("#.##")
-        var imc = currentWeight / (currentHeight.toDouble().pow(2))
+        var imc = currentWeight / (currentHeight.toDouble() /100 * currentHeight.toDouble() /100)
         var result = df.format(imc).toDouble()
-        Log.i("calculoIMC", "$result")
+        navigateToResult(result)
+    }
+    private fun navigateToResult(imc_result: Double){
+        val resultIntent = Intent(this, ResultActivity::class.java)
+        resultIntent.putExtra(IMC_KEY, imc_result)
+        startActivity(resultIntent)
     }
 }
